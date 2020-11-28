@@ -1,0 +1,3 @@
+[submodule "hasp"]
+	path = hasp
+	url = git@github.com:APT-Al/hasp.git
