@@ -2,7 +2,7 @@ import os
 import sys
 import base64
 
-import Utils
+import utils
 from hasp.AESCipher import AESCipher
 from hasp.RSACipher import RSACipher
 
@@ -24,12 +24,12 @@ def openthelock(enc_aesIV_file_path,dec_aesIV_file_path):
     """
     print("Begin to DECRYPT the keys ::",enc_aesIV_file_path)
 
-    rsa_private_key = open(Utils.rsa_private_key_path,"rb").read()
+    rsa_private_key = open(utils.rsa_private_key_path,"rb").read()
     rsa_cipher = RSACipher(rsa_private_key)
     
     with open(enc_aesIV_file_path,"rb") as ivs_file:
         
-        for i in range(Utils.pass_the_introduction):
+        for i in range(utils.pass_the_introduction):
             _temp = ivs_file.readline()
 
         with open(dec_aesIV_file_path,"wb") as dec_ivs_file:
@@ -89,13 +89,13 @@ def main():
 
     # if this file have been created, we're going to create a new one not to ruin old keys
     _count_of_file = 0
-    for name in os.listdir(Utils.desktop_directory):
-        if name[-len(Utils.aesIV_file_store_name):] == Utils.aesIV_file_store_name:
+    for name in os.listdir(utils.desktop_directory):
+        if name[-len(utils.aesIV_file_store_name):] == utils.aesIV_file_store_name:
             _count_of_file += 1
 
     for i in range(_count_of_file):
-        aesIV_file_store_path = os.path.join(Utils.desktop_directory,str(i)+Utils.aesIV_file_store_name)
-        dec_aesIV_file_store_path = os.path.join(Utils.desktop_directory,str(i)+Utils.dec_aesIV_file_store_name)
+        aesIV_file_store_path = os.path.join(utils.desktop_directory,str(i)+utils.aesIV_file_store_name)
+        dec_aesIV_file_store_path = os.path.join(utils.desktop_directory,str(i)+utils.dec_aesIV_file_store_name)
 
         print(aesIV_file_store_path,":::",dec_aesIV_file_store_path)
     

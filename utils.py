@@ -1,7 +1,7 @@
 import os
 
 # passing the introduction section
-pass_the_introduction = 6
+pass_the_introduction = 7
 
 # the beginning point of recon
 root_directory = os.path.expanduser('~')
