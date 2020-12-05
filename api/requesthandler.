@@ -1,0 +1,54 @@
+
+HTML::class
+GET:
+
+POST:
+
+
+action=showall & tablename=victim & whereconditions=[(columnName, operator, value)] & 
+
+UPDATE:
+
+
+DELETE:
+
+
+
+
+
+
+DB::class
+
+index (tablename , whereconditions=[])
+
+rawquery= "select * from %s where coluns=%s.....".format(table,column....)
+
+
+
+POST /API/victim HTTP 1.1
+.
+.
+.
+.
+
+action=getall&table=Victim
+
+select * from victim where id > 5 and type = online 
+
+
+
+
+firsttouch?id=victim
+
+sdjgfdjsghadjfdsjagfdsafdsaf RSA pub encrypted
+
+uptadeinfo
+
+
+
+
+
+
+
+
+
