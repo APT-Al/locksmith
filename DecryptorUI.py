@@ -1,4 +1,5 @@
 import sys
+from random import randint
 from PyQt5 import QtWidgets 
 from PyQt5 import uic
 
@@ -9,28 +10,54 @@ class Decrpytor(QtWidgets.QMainWindow):
         super(Decrpytor, self).__init__()
         uic.loadUi(uipath, self)
 
+        # BUTTONS
         self.infoFileButton = self.findChild(QtWidgets.QPushButton, 'infoFileButton') # Find the button
         self.infoFileButton.clicked.connect(self.clickinfoFileButton) # Remember to pass the definition/method, not the return value!
 
         self.rsaFileButton = self.findChild(QtWidgets.QPushButton, 'rsaFileButton')
         self.rsaFileButton.clicked.connect(self.clickRSAFileButton)
 
+        self.savemylifeButton = self.findChild(QtWidgets.QPushButton, 'savemylifeButton')
+        self.savemylifeButton.clicked.connect(self.clickSavemylifeButton)
+
+        # LABELS
         self.infoFileLocationLabel = self.findChild(QtWidgets.QLabel, "infoFileLocationLabel")
+        self.flaginfo = False
         self.rsaFileLocationLabel = self.findChild(QtWidgets.QLabel, "rsaFileLocationLabel")
+        self.flagrsa = False
+
+        # PROGRESS BAR
+        self.progressBar = self.findChild(QtWidgets.QProgressBar, "progressBar")
+        #self.progressBar.setValue(randint(0,100))
 
         self.show()
 
     def openFileExplorer(self):
-        selected_file = FileExplorer().initUI()
-        return selected_file
+        _selected_file = FileExplorer().initUI()
+        return _selected_file
 
     def clickinfoFileButton(self):
-        self.infoFileLocationLabel.setText(self.openFileExplorer())
-
+        _selected_file = self.openFileExplorer()
+        if _selected_file:
+            self.infoFileLocationLabel.setText(_selected_file)
+            self.flaginfo = True
+        self.enableSavemylifeButton()
+        
     def clickRSAFileButton(self):
-        self.rsaFileLocationLabel.setText(self.openFileExplorer())
+        _selected_file = self.openFileExplorer()
+        if _selected_file:
+            self.rsaFileLocationLabel.setText(_selected_file)
+            self.flagrsa = True
+        self.enableSavemylifeButton()
+
+    def enableSavemylifeButton(self):
+        if self.flaginfo and self.flagrsa:
+            self.savemylifeButton.setEnabled(True)
+
+    def clickSavemylifeButton(self):
+        print("okan")
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    window = Decrpytor("dialog.ui")
+    window = Decrpytor("mainScreen.ui")
     app.exec_()
