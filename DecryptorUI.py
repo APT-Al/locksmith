@@ -19,6 +19,7 @@ class Decrpytor(QtWidgets.QMainWindow):
 
         self.savemylifeButton = self.findChild(QtWidgets.QPushButton, 'savemylifeButton')
         self.savemylifeButton.clicked.connect(self.clickSavemylifeButton)
+        self.savemylifeButton.setEnabled(True)
 
         # LABELS
         self.infoFileLocationLabel = self.findChild(QtWidgets.QLabel, "infoFileLocationLabel")
@@ -29,6 +30,12 @@ class Decrpytor(QtWidgets.QMainWindow):
         # PROGRESS BAR
         self.progressBar = self.findChild(QtWidgets.QProgressBar, "progressBar")
         #self.progressBar.setValue(randint(0,100))
+
+        # LIST WIDGET
+        self.decryptedFilesListWidget = self.findChild(QtWidgets.QListWidget,"decryptedFilesList")
+
+        # SCROLL AREA
+        self.scrollBar = self.findChild(QtWidgets.QScrollArea,"fileListScroolArea")
 
         self.show()
 
@@ -55,7 +62,8 @@ class Decrpytor(QtWidgets.QMainWindow):
             self.savemylifeButton.setEnabled(True)
 
     def clickSavemylifeButton(self):
-        print("okan")
+        for i in range(50):
+            self.decryptedFilesListWidget.addItem(str(randint(0,100)))
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

@@ -173,7 +173,7 @@ p, li { white-space: pre-wrap; }
      </widget>
     </widget>
    </widget>
-   <widget class="QScrollArea" name="scrollArea_2">
+   <widget class="QScrollArea" name="fileListScroolArea">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -211,7 +211,7 @@ p, li { white-space: pre-wrap; }
      <rect>
       <x>40</x>
       <y>400</y>
-      <width>561</width>
+      <width>781</width>
       <height>21</height>
      </rect>
     </property>
