@@ -5,6 +5,7 @@ from PyQt5 import QtWidgets
 from PyQt5 import uic
 
 from FileExplorerUI import FileExplorer
+from locksmith import LockSmith
 
 class Decrpytor(QtWidgets.QMainWindow):
     def __init__(self,uipath):
@@ -63,8 +64,9 @@ class Decrpytor(QtWidgets.QMainWindow):
             self.savemylifeButton.setEnabled(True)
 
     def clickSavemylifeButton(self):
-        for i in range(50):
-            self.decryptedFilesListWidget.addItem(str(randint(0,100)))
+        my_locksmith = LockSmith(self.infoFileLocationLabel.text(),self.rsaFileLocationLabel.text())
+        file_count = my_locksmith.openthelock()
+        my_locksmith.startingRescueFiles(file_count, self.decryptedFilesListWidget, self.progressBar)
 
 def resourcePath(filename, folders = ""):
     """ Get absolute path to resource, works for dev and for PyInstaller """

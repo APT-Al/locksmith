@@ -38,6 +38,8 @@ class LockSmith(object):
         """
         print("Begin to DECRYPT the keys ::",self.encrypted_aesIV_file_path)
 
+        encrypted_file_count = 0
+
         rsa_private_key = open(self.rsa_private_key_file_path,"rb").read()
         rsa_cipher = RSACipher(rsa_private_key)
         
@@ -56,11 +58,14 @@ class LockSmith(object):
                 
                 # Decrypt iv and path with given RSA private key than write the decrypted pairs to decrypted_aesIV_file_path
                 for line in ivs_file.readlines():
+                    encrypted_file_count += 1
                     iv, which_file = line.strip().split(b":::::")       
                     iv = rsa_cipher.decrypt(base64.b64decode(iv.decode()))
                     which_file = rsa_cipher.decrypt(base64.b64decode(which_file.decode("utf-8")))
                     dec_ivs_file.write(iv+b":::::"+which_file+b"\n")
-
+        
+        return encrypted_file_count
+        
     def decryptFile(self,aes_cipher,iv,file_path):
         """
             Decryption of files which are encrypted with AES is done here
@@ -81,11 +86,13 @@ class LockSmith(object):
         # deleting .aptal file
         os.remove(encrypted_file_path) 
 
-    def startDecryptFiles(self):
+    def startingRescueFiles(self, file_count=0, list_widget=False, progressbar=False):
         """
             Reading IVs and file paths from decrypted_iv_file.txt which is a form of decrypted HEYY_APTAl_READ_ME.txt file
         """
         print("Begin to DECRYPT the Files ::",self.decrypted_aesIV_file_path)
+        _decrypted_file_count = 0
+        _p1 = 100/file_count
 
         with open(self.decrypted_aesIV_file_path,"rb") as ivs_file:
 
@@ -97,13 +104,11 @@ class LockSmith(object):
             for line in ivs_file.readlines():
                 iv, which_file = line.strip().split(b":::::")
                 self.decryptFile(aes_cipher,iv,which_file)
+                _decrypted_file_count += 1
+                if not list_widget == False:
+                    _percent = _p1 * _decrypted_file_count
+                    progressbar.setValue(_percent)
+                    list_widget.addItem(which_file.decode())
 
 
-    def startRescue(self):
-
-        self.openthelock()
-        self.startDecryptFiles()
-
-
-ls = LockSmith("/home/kali/Desktop/0HEYY_APTAl_READ_ME.txt","/home/kali/Templates/PROJE/locksmith/victimNumber_rsa_private_key")
-ls.startRescue()
+# ls = LockSmith("/home/kali/Desktop/0HEYY_APTAl_READ_ME.txt","/home/kali/Templates/PROJE/locksmith/victimNumber_rsa_private_key")
