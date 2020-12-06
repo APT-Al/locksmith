@@ -1,4 +1,5 @@
 import sys
+import os
 from random import randint
 from PyQt5 import QtWidgets 
 from PyQt5 import uic
@@ -65,7 +66,18 @@ class Decrpytor(QtWidgets.QMainWindow):
         for i in range(50):
             self.decryptedFilesListWidget.addItem(str(randint(0,100)))
 
+def resourcePath(filename, folders = ""):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, folders, filename)
+
 if __name__ == "__main__":
+    GUI_path = resourcePath("mainScreen.ui")
     app = QtWidgets.QApplication(sys.argv)
-    window = Decrpytor("mainScreen.ui")
+    window = Decrpytor(GUI_path)
     app.exec_()
