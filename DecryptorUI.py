@@ -67,6 +67,7 @@ class Decrpytor(QtWidgets.QMainWindow):
         my_locksmith = LockSmith(self.infoFileLocationLabel.text(),self.rsaFileLocationLabel.text())
         file_count = my_locksmith.openthelock()
         my_locksmith.startingRescueFiles(file_count, self.decryptedFilesListWidget, self.progressBar)
+        self.savemylifeButton.setEnabled(False)
 
 def resourcePath(filename, folders = ""):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -79,7 +80,7 @@ def resourcePath(filename, folders = ""):
     return os.path.join(base_path, folders, filename)
 
 if __name__ == "__main__":
-    GUI_path = resourcePath("mainScreen.ui")
+    GUI_path = resourcePath("locksmith.ui")
     app = QtWidgets.QApplication(sys.argv)
     window = Decrpytor(GUI_path)
     app.exec_()

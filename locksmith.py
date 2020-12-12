@@ -8,7 +8,7 @@ from hasp.RSACipher import RSACipher
 class LockSmith(object):
 
     # passing the introduction section
-    pass_the_introduction = 7
+    pass_the_introduction = 4
     dec_aesIV_file_store_name = "decrypted_iv_file.txt"
 
     def __init__(self, encrypted_aesIV_file_path, rsa_private_key_file_path):
